@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oop-7", "oop-7\oop-7.csproj", "{7C68DB1B-E182-4B28-A925-747FBB90C011}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoublyLinkeList-oop", "DoublyLinkeList-oop\DoublyLinkeList-oop.csproj", "{7C68DB1B-E182-4B28-A925-747FBB90C011}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

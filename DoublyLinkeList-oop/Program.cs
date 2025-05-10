@@ -13,13 +13,13 @@ public class Node
         get => previous;
         set => previous = value;
     }
-    
+
     public int Data
     {
         get => data;
         set => data = value;
     }
-    
+
     public Node? Next
     {
         get => next;
@@ -32,7 +32,7 @@ public class Node
         previous = null;
         next = null;
     }
-    
+
 
     public static void FromHeadTraversal(Node head)
     {
@@ -48,7 +48,7 @@ public class Node
         Console.WriteLine();
     }
 
-    public static int SearchFirstEntry(Node head, int value)
+    private static int SearchFirstEntry(Node head, int value)
     {
         Node? curr = head;
 
@@ -80,23 +80,114 @@ public class Node
 
 public class DoublyLinkedList : IEnumerable<int>
 {
-    private Node head;
-    private Node tail;
-    
+    private Node? head;
+    private Node? tail;
+
     public void InsertAtTheEnd(int value)
     {
-        Node node = new Node(value);
+        var node = new Node(value);
 
         if (tail != null)
         {
             tail.Next = node;
             node.Previous = tail;
-            tail = node;
+        }
+
+        tail = node;
+
+        if (head == null)
+        {
+            head = node;
         }
     }
+
+    public int FindFirstElementEntry(int value)
+    {
+        if (head == null) throw new EmptyListException("List is empty");
+        var curr = head;
+        int index = 0;
+        while (curr != null)
+        {
+            if (curr.Data == value)
+            {
+                return index;
+            }
+
+            curr = curr.Next;
+            index++;
+        }
+
+        return index;
+    }
+
+    public int FindSumOfOddElements()
+    {
+        if (head == null) throw new EmptyListException("List is empty");
+        var curr = head;
+        int index = 0;
+        int sum = 0;
+        while (curr != null)
+        {
+            if (index % 2 == 1)
+            {
+                sum += curr.Data;
+            }
+
+            curr = curr.Next;
+            index++;
+        }
+
+        return sum;
+    }
+
+    public DoublyLinkedList GetListOfElementsGreaterThan(int value)
+    {
+        if (head == null) throw new EmptyListException("List is empty");
+        var list = new DoublyLinkedList();
+        var curr = head;
+        while (curr != null)
+        {
+            if (curr.Data > value)
+            {
+                list.InsertAtTheEnd(curr.Data);
+            }
+
+            curr = curr.Next;
+        }
+
+        return list;
+    }
+//FIX
+    public void DeleteElementsGreaterThanAverage()
+    {
+        if (head == null) throw new EmptyListException("List is empty");
+        var curr = head;
+        int sum = 0;
+        int count = 0;
+        while (curr != null)
+        {
+            sum += curr.Data;
+            count++;
+            curr = curr.Next;
+        }
+
+        var average = sum / count;
+        curr = head;
+        while (curr != null)
+        {
+            if (curr.Data > average)
+            {
+                curr.Previous!.Next = curr.Next;
+                curr.Next!.Previous = curr.Previous;
+            }
+
+            curr = curr.Next;
+        }
+    }
+
     public IEnumerator<int> GetEnumerator()
     {
-        Node? current = head;
+        var current = head;
         while (current != null)
         {
             yield return current.Data;
@@ -114,16 +205,20 @@ class Program
 {
     static void Main(string[] args)
     {
-        DoublyLinkedList list = Input.InputList("Enter the elements for your list: ");
+        var list = Io.InputList("Enter the elements for your list: ");
+        Io.PrintList(list);
+        var newList = list.GetListOfElementsGreaterThan(5);
+        newList.DeleteElementsGreaterThanAverage();
+        Io.PrintList(newList);
     }
 }
 
-public static class Input
+public static class Io
 {
     public static DoublyLinkedList InputList(string massage)
     {
         Console.WriteLine(massage);
-        string? input = Console.ReadLine();
+        var input = Console.ReadLine();
         if (string.IsNullOrWhiteSpace(input))
         {
             throw new ArgumentNullException(nameof(input));
@@ -132,12 +227,35 @@ public static class Input
         int[] array = input.Split(' ', StringSplitOptions.RemoveEmptyEntries)
             .Select(x => Convert.ToInt32(x))
             .ToArray();
-        DoublyLinkedList list = new DoublyLinkedList();
+        var list = new DoublyLinkedList();
         foreach (var item in array)
         {
             list.InsertAtTheEnd(item);
         }
 
         return list;
+    }
+
+    public static void PrintList(DoublyLinkedList list)
+    {
+        foreach (var item in list)
+        {
+            Console.Write(item + " ");
+        }
+    }
+}
+
+class EmptyListException : Exception
+{
+    public EmptyListException()
+    {
+    }
+
+    public EmptyListException(string message) : base(message)
+    {
+    }
+
+    public EmptyListException(string message, Exception inner) : base(message, inner)
+    {
     }
 }
