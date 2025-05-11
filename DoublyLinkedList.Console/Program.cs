@@ -19,9 +19,15 @@ class Program
         PrintList(list);
         Console.WriteLine("Enter element you want to search: ");
         var elementToSearch = Convert.ToInt32(Console.ReadLine());
-        //
-        Console.WriteLine($"First entry of element {elementToSearch} at index: " +
-                          list.FindFirstElementEntry(elementToSearch));
+        var index = list.FindFirstElementEntry(elementToSearch);
+        if (index != null)
+        {
+            Console.WriteLine($"First entry of element {elementToSearch} at index: " + index);
+        }
+        else
+        {
+            Console.WriteLine("There is no such element in list");
+        }
 
         Console.WriteLine("Sum of odd elements: " + list.FindSumOfOddElements());
 
